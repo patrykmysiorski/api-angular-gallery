@@ -2,8 +2,11 @@ package com.apiangulargallery.apiangulargallery.rest.gallery;
 
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
 
 @Service
 public class GalleryService {
@@ -15,6 +18,7 @@ public class GalleryService {
     }
 
     public boolean addGallery(Gallery gallery) {
+        gallery.setDateCreated(getCurrentDateIsoString());
         galleryRepository.save(gallery);
         return true;
     }
@@ -31,5 +35,12 @@ public class GalleryService {
 
     public List<Gallery> getAllGalleries() {
         return galleryRepository.findAll();
+    }
+
+    private String getCurrentDateIsoString() {
+        Date date = new Date(System.currentTimeMillis());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return simpleDateFormat.format(date);
     }
 }
